@@ -3,21 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Signee</title>
     <style>
-      * {
+      html,
+      body {
+        height: 100%;
         margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+        font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Segoe UI', cursive, sans-serif;
+        background: linear-gradient(135deg, #a0c4ff, #bdb2ff);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h1 {
+        color: #333;
+        font-size: 20px;
+        margin-bottom: 20px;
+        background: #fff;
+        padding: 10px 16px;
+        border-radius: 16px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      #canvas {
+        background: #fff;
+        border: 4px dashed #8ecae6;
+        border-radius: 16px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        touch-action: none;
       }
     </style>
   </head>
   <body>
-    <canvas id="canvas"></canvas>
-    <script src="dist/index.umd.js"></script>
+    <h1>Draw your signature here ✍️</h1>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/signee/dist/index.umd.js"></script>
     <script>
-      const width = window.innerWidth
-      const height = window.innerHeight
+      const width = 800
+      const height = 600
       const canvas = document.getElementById('canvas')
       canvas.width = width
       canvas.height = height
