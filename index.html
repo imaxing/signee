@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <script src="dist/index.umd.js"></script>
+    <script>
+      const width = window.innerWidth
+      const height = window.innerHeight
+      const canvas = document.getElementById('canvas')
+      canvas.width = width
+      canvas.height = height
+      canvas.style.width = width + 'px'
+      canvas.style.height = height + 'px'
+
+      const signee = new Signee({
+        canvas,
+        width,
+        height,
+        scale: window.devicePixelRatio, // optional
+        // optional, mobile platform need to pass this
+        // uni.requestAnimationFrame uniapp
+        // wx.requestAnimationFrame wechat mini program
+        // window.requestAnimationFrame browser
+        requestAnimationFrame: cb => window.requestAnimationFrame(cb)
+      })
+
+      let mousedowned = false
+
+      const start = e => {
+        mousedowned = true
+        signee.start({
+          x: e.touches ? e.touches[0].clientX : e.offsetX,
+          y: e.touches ? e.touches[0].clientY : e.offsetY,
+          t: Date.now()
+        })
+      }
+
+      const move = e => {
+        if (!mousedowned) return
+        signee.draw({
+          x: e.touches ? e.touches[0].clientX : e.offsetX,
+          y: e.touches ? e.touches[0].clientY : e.offsetY,
+          t: Date.now()
+        })
+      }
+
+      const end = () => {
+        mousedowned = false
+        signee.end()
+      }
+
+      // mouse event
+      canvas.addEventListener('mousedown', start)
+      canvas.addEventListener('mousemove', move)
+      canvas.addEventListener('mouseup', end)
+      canvas.addEventListener('mouseleave', end)
+
+      // touch event
+      canvas.addEventListener('touchstart', e => {
+        e.preventDefault()
+        start(e)
+      })
+      canvas.addEventListener('touchmove', e => {
+        e.preventDefault()
+        move(e)
+      })
+      canvas.addEventListener('touchend', e => {
+        e.preventDefault()
+        end()
+      })
+    </script>
+  </body>
+</html>

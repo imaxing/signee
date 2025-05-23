@@ -1,0 +1,9 @@
+{
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "target": "es2016",
+    "noImplicitThis": false,
+    "module": "es6",
+    "strict": true
+  }
+}
