@@ -20,7 +20,7 @@
       h1 {
         color: #333;
         font-size: 20px;
-        margin-bottom: 20px;
+        margin: 12px 0;
         background: #fff;
         padding: 10px 16px;
         border-radius: 16px;
@@ -33,78 +33,156 @@
         border-radius: 16px;
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         touch-action: none;
+        cursor: crosshair;
+      }
+
+      .controls {
+        margin-top: 16px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      button,
+      input[type='range'] {
+        font-family: inherit;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      button {
+        background-color: #fff;
+      }
+
+      input[type='range'] {
+        width: 120px;
       }
     </style>
   </head>
   <body>
     <h1>Draw your signature here ✍️</h1>
     <canvas id="canvas" width="800" height="600"></canvas>
+
+    <div class="controls">
+      <button id="saveBtn">💾 Save as Image</button>
+      <button id="colorBtn">🎨 Random Color</button>
+      <label>
+        ✏️ Brush Size:
+        <input id="sizeSlider" type="range" min="3" max="10" value="4" />
+      </label>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/signee/dist/index.umd.js"></script>
     <script>
+      const canvas = document.getElementById('canvas')
       const width = 800
       const height = 600
-      const canvas = document.getElementById('canvas')
-      canvas.width = width
-      canvas.height = height
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = width * dpr
+      canvas.height = height * dpr
       canvas.style.width = width + 'px'
       canvas.style.height = height + 'px'
+
+      const ctx = canvas.getContext('2d')
+      ctx.scale(dpr, dpr)
 
       const signee = new Signee({
         canvas,
         width,
         height,
-        scale: window.devicePixelRatio, // optional
-        // optional, mobile platform need to pass this
-        // uni.requestAnimationFrame uniapp
-        // wx.requestAnimationFrame wechat mini program
-        // window.requestAnimationFrame browser
+        scale: dpr,
+        color: '#000000',
+        minWidth: 4,
+        maxWidth: 4,
         requestAnimationFrame: cb => window.requestAnimationFrame(cb)
       })
 
-      let mousedowned = false
+      let isDrawing = false
+      let currentColor = '#000000'
+      let currentSize = 4
+
+      const getPos = e => ({
+        x: e.touches ? e.touches[0].clientX : e.offsetX,
+        y: e.touches ? e.touches[0].clientY : e.offsetY,
+        t: Date.now()
+      })
 
       const start = e => {
-        mousedowned = true
-        signee.start({
-          x: e.touches ? e.touches[0].clientX : e.offsetX,
-          y: e.touches ? e.touches[0].clientY : e.offsetY,
-          t: Date.now()
-        })
+        isDrawing = true
+
+        // ✅ Set updated brush properties before start
+        signee.color = currentColor
+        signee.minWidth = currentSize
+        signee.maxWidth = currentSize
+
+        signee.start(getPos(e))
       }
 
       const move = e => {
-        if (!mousedowned) return
-        signee.draw({
-          x: e.touches ? e.touches[0].clientX : e.offsetX,
-          y: e.touches ? e.touches[0].clientY : e.offsetY,
-          t: Date.now()
-        })
+        if (!isDrawing) return
+        signee.draw(getPos(e))
       }
 
       const end = () => {
-        mousedowned = false
+        isDrawing = false
         signee.end()
       }
 
-      // mouse event
       canvas.addEventListener('mousedown', start)
       canvas.addEventListener('mousemove', move)
       canvas.addEventListener('mouseup', end)
       canvas.addEventListener('mouseleave', end)
 
-      // touch event
-      canvas.addEventListener('touchstart', e => {
-        e.preventDefault()
-        start(e)
-      })
-      canvas.addEventListener('touchmove', e => {
-        e.preventDefault()
-        move(e)
-      })
-      canvas.addEventListener('touchend', e => {
-        e.preventDefault()
-        end()
-      })
+      canvas.addEventListener(
+        'touchstart',
+        e => {
+          e.preventDefault()
+          start(e)
+        },
+        { passive: false }
+      )
+
+      canvas.addEventListener(
+        'touchmove',
+        e => {
+          e.preventDefault()
+          move(e)
+        },
+        { passive: false }
+      )
+
+      canvas.addEventListener(
+        'touchend',
+        e => {
+          e.preventDefault()
+          end()
+        },
+        { passive: false }
+      )
+
+      // 🎨 Random Color Button
+      document.getElementById('colorBtn').onclick = () => {
+        currentColor = `hsl(${Math.floor(Math.random() * 360)}, 80%, 40%)`
+      }
+
+      // ✏️ Brush Size Slider
+      document.getElementById('sizeSlider').oninput = e => {
+        currentSize = Number(e.target.value)
+      }
+
+      // 💾 Save as PNG
+      document.getElementById('saveBtn').onclick = () => {
+        const image = canvas.toDataURL('image/png')
+        const link = document.createElement('a')
+        link.href = image
+        link.download = 'signature.png'
+        link.click()
+      }
     </script>
   </body>
 </html>
