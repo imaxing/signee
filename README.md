@@ -95,10 +95,8 @@ useMouseEvent({
 
 ## 🧪 Demos
 
-- [Vue 2 Example](https://codesandbox.io/s/smooth-line-86qj3v?fontsize=14&hidenavigation=1&theme=dark)
-- [Vue 3 Example](https://codesandbox.io/s/smooth-lint-vue3-example-o78wry)
-- [React Example](https://codesandbox.io/s/smooth-line-example-react-j5jnor)
+- [Codesandbox](https://codesandbox.io/p/sandbox/56t9pd)
 
----
+- [Static HTML](https://github.com/imaxing/signee/blob/main/index.html)
 
 For more use cases and integrations, feel free to open an issue or contribute to the project!

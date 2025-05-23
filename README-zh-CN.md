@@ -92,9 +92,8 @@ useMouseEvent({
 
 ## 🧪 示例 Demo
 
-- [Vue 2 示例](https://codesandbox.io/s/smooth-line-86qj3v?fontsize=14&hidenavigation=1&theme=dark)
-- [Vue 3 示例](https://codesandbox.io/s/smooth-lint-vue3-example-o78wry)
-- [React 示例](https://codesandbox.io/s/smooth-line-example-react-j5jnor)
+- [Codesandbox](https://codesandbox.io/p/sandbox/56t9pd)
+- [Static HTML](https://github.com/imaxing/signee/blob/main/index.html)
 
 ---
 
