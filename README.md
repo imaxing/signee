@@ -97,6 +97,6 @@ useMouseEvent({
 
 - [Codesandbox](https://codesandbox.io/p/sandbox/56t9pd)
 
-- [Online Demo]([https://github.com/imaxing/signee/blob/main/index.html](https://signee.vercel.app/))
+- [Online Demo]([https://github.com/imaxing/signee/blob/main/index.html](https://signee.vercel.app/)
 
 For more use cases and integrations, feel free to open an issue or contribute to the project!
