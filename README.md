@@ -1,4 +1,4 @@
-[中文文档](./README.zh-CN.md)
+[中文文档](https://github.com/imaxing/signee/blob/main/README-zh-CN.md)
 
 # Signee
 
